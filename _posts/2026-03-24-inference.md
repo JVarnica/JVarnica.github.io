@@ -1,9 +1,11 @@
 ---
 layout: post
-title: Why vLLM as inference engine!!
+title: "Why vLLM as inference engine!!"
+date: 2026-03-24
+categories: [backend, vLLM]
+tags: [quantization, vllm, inference, llm]
+project: execuchat
 ---
-
-## vLLM- Why & How to use it
 
 ### vLLM why?
 You cannot use naive Pytorch for model inference, it is used for model training. So vLLM was used as it uses PyTorch under the hood TorchAO for quantization and
