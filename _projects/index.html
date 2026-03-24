@@ -6,13 +6,20 @@ permalink: /projects/
 
 <h1>Projects</h1>
 
-<div class="projects-grid">
-  {% for project in site.projects %}
-    <div class="project-card">
-      <h2><a href="{{ project.url | relative_url }}">{{ project.title }}</a></h2>
-      {% if project.summary %}
-        <p>{{ project.summary }}</p>
-      {% endif %}
-    </div>
-  {% endfor %}
-</div>
+{% if site.projects and site.projects.size > 0 %}
+  <div class="projects-grid">
+    {% for project in site.projects %}
+      <div class="project-card">
+        <h2>
+          <a href="{{ project.url | relative_url }}">{{ project.title }}</a>
+        </h2>
+
+        {% if project.summary %}
+          <p>{{ project.summary }}</p>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <p>No projects found.</p>
+{% endif %}
