@@ -1,0 +1,123 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 720" font-family="'Segoe UI', sans-serif">
+  <defs>
+    <filter id="shadow" x="-4%" y="-4%" width="108%" height="108%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-opacity="0.15"/>
+    </filter>
+    <linearGradient id="gatewayGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#334155"/>
+    </linearGradient>
+    <linearGradient id="serviceGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#2563eb"/>
+    </linearGradient>
+    <linearGradient id="dataGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+    <linearGradient id="clientGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#8b5cf6"/>
+      <stop offset="100%" stop-color="#7c3aed"/>
+    </linearGradient>
+    <marker id="arrowGray" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#64748b"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="960" height="720" rx="16" fill="#f8fafc"/>
+
+  <!-- Title -->
+  <text x="480" y="42" text-anchor="middle" font-size="22" font-weight="700" fill="#0f172a">Chatbot — System Architecture</text>
+  <text x="480" y="64" text-anchor="middle" font-size="13" fill="#94a3b8">Android Client → API Gateway → Microservices</text>
+
+  <!-- Legend -->
+  <rect x="180" y="82" width="14" height="14" rx="3" fill="url(#clientGrad)"/>
+  <text x="200" y="94" font-size="11" fill="#475569">Client</text>
+  <rect x="270" y="82" width="14" height="14" rx="3" fill="url(#gatewayGrad)"/>
+  <text x="290" y="94" font-size="11" fill="#475569">Gateway</text>
+  <rect x="370" y="82" width="14" height="14" rx="3" fill="url(#serviceGrad)"/>
+  <text x="390" y="94" font-size="11" fill="#475569">Service</text>
+  <rect x="460" y="82" width="14" height="14" rx="3" fill="url(#dataGrad)"/>
+  <text x="480" y="94" font-size="11" fill="#475569">Data Store</text>
+
+  <!-- ── CLIENT ── -->
+  <rect x="60" y="310" width="150" height="80" rx="12" fill="url(#clientGrad)" filter="url(#shadow)"/>
+  <text x="135" y="346" text-anchor="middle" font-size="16" font-weight="600" fill="#fff">Android</text>
+  <text x="135" y="368" text-anchor="middle" font-size="12" fill="#ddd6fe">(Client)</text>
+
+  <!-- ── GATEWAY ── -->
+  <rect x="320" y="290" width="160" height="120" rx="14" fill="url(#gatewayGrad)" filter="url(#shadow)"/>
+  <text x="400" y="346" text-anchor="middle" font-size="18" font-weight="700" fill="#fff">Gateway</text>
+  <text x="400" y="368" text-anchor="middle" font-size="11" fill="#94a3b8">API Router</text>
+
+  <!-- Arrow: Client → Gateway -->
+  <line x1="210" y1="350" x2="316" y2="350" stroke="#64748b" stroke-width="2.5" marker-end="url(#arrowGray)"/>
+
+  <!-- ── SERVICES ── -->
+
+  <!-- vLLM -->
+  <rect x="650" y="120" width="150" height="64" rx="10" fill="url(#serviceGrad)" filter="url(#shadow)"/>
+  <text x="725" y="150" text-anchor="middle" font-size="15" font-weight="600" fill="#fff">vLLM</text>
+  <text x="725" y="168" text-anchor="middle" font-size="10" fill="#bfdbfe">Language Model</text>
+
+  <!-- SearXNG -->
+  <rect x="650" y="210" width="150" height="64" rx="10" fill="url(#serviceGrad)" filter="url(#shadow)"/>
+  <text x="725" y="240" text-anchor="middle" font-size="15" font-weight="600" fill="#fff">SearXNG</text>
+  <text x="725" y="258" text-anchor="middle" font-size="10" fill="#bfdbfe">Search Engine</text>
+
+  <!-- Auth -->
+  <rect x="650" y="300" width="150" height="64" rx="10" fill="url(#serviceGrad)" filter="url(#shadow)"/>
+  <text x="725" y="330" text-anchor="middle" font-size="15" font-weight="600" fill="#fff">Auth</text>
+  <text x="725" y="348" text-anchor="middle" font-size="10" fill="#bfdbfe">Authentication</text>
+
+  <!-- AioSQLite -->
+  <rect x="650" y="390" width="150" height="64" rx="10" fill="url(#dataGrad)" filter="url(#shadow)"/>
+  <text x="725" y="420" text-anchor="middle" font-size="15" font-weight="600" fill="#fff">AioSQLite</text>
+  <text x="725" y="438" text-anchor="middle" font-size="10" fill="#a7f3d0">Conversations DB</text>
+
+  <!-- Qdrant -->
+  <rect x="650" y="480" width="150" height="64" rx="10" fill="url(#dataGrad)" filter="url(#shadow)"/>
+  <text x="725" y="510" text-anchor="middle" font-size="15" font-weight="600" fill="#fff">Qdrant</text>
+  <text x="725" y="528" text-anchor="middle" font-size="10" fill="#a7f3d0">Vector DB (RAG)</text>
+
+  <!-- Redis -->
+  <rect x="650" y="570" width="150" height="64" rx="10" fill="url(#dataGrad)" filter="url(#shadow)"/>
+  <text x="725" y="600" text-anchor="middle" font-size="15" font-weight="600" fill="#fff">Redis</text>
+  <text x="725" y="618" text-anchor="middle" font-size="10" fill="#a7f3d0">Sessions / Cache</text>
+
+  <!-- ── CONNECTIONS ── -->
+
+  <!-- /chat → vLLM -->
+  <line x1="480" y1="315" x2="646" y2="152" stroke="#64748b" stroke-width="1.8" stroke-dasharray="6 3" marker-end="url(#arrowGray)"/>
+  <rect x="530" y="210" width="52" height="20" rx="4" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="0.8"/>
+  <text x="556" y="224" text-anchor="middle" font-size="10" font-weight="600" fill="#334155">/chat</text>
+
+  <!-- /search → SearXNG -->
+  <line x1="480" y1="328" x2="646" y2="242" stroke="#64748b" stroke-width="1.8" stroke-dasharray="6 3" marker-end="url(#arrowGray)"/>
+  <rect x="538" y="268" width="62" height="20" rx="4" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="0.8"/>
+  <text x="569" y="282" text-anchor="middle" font-size="10" font-weight="600" fill="#334155">/search</text>
+
+  <!-- /login /register → Auth -->
+  <line x1="480" y1="342" x2="646" y2="332" stroke="#64748b" stroke-width="1.8" stroke-dasharray="6 3" marker-end="url(#arrowGray)"/>
+  <rect x="538" y="322" width="72" height="20" rx="4" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="0.8"/>
+  <text x="574" y="336" text-anchor="middle" font-size="10" font-weight="600" fill="#334155">/login /reg</text>
+
+  <!-- /save → AioSQLite -->
+  <line x1="480" y1="356" x2="646" y2="416" stroke="#64748b" stroke-width="1.8" stroke-dasharray="6 3" marker-end="url(#arrowGray)"/>
+  <rect x="538" y="374" width="52" height="20" rx="4" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="0.8"/>
+  <text x="564" y="388" text-anchor="middle" font-size="10" font-weight="600" fill="#334155">/save</text>
+
+  <!-- /save → Qdrant -->
+  <line x1="480" y1="370" x2="646" y2="506" stroke="#64748b" stroke-width="1.8" stroke-dasharray="6 3" marker-end="url(#arrowGray)"/>
+  <rect x="524" y="434" width="52" height="20" rx="4" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="0.8"/>
+  <text x="550" y="448" text-anchor="middle" font-size="10" font-weight="600" fill="#334155">/save</text>
+
+  <!-- /session → Redis -->
+  <line x1="480" y1="385" x2="646" y2="598" stroke="#64748b" stroke-width="1.8" stroke-dasharray="6 3" marker-end="url(#arrowGray)"/>
+  <rect x="510" y="500" width="64" height="20" rx="4" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="0.8"/>
+  <text x="542" y="514" text-anchor="middle" font-size="10" font-weight="600" fill="#334155">/session</text>
+
+  <!-- Footer -->
+  <text x="480" y="690" text-anchor="middle" font-size="11" fill="#94a3b8">Chatbot Architecture • Gateway Pattern</text>
+</svg>

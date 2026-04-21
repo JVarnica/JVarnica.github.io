@@ -12,10 +12,10 @@ permalink: /blog/
       <li>
         <h2><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h2>
         {% if post.date %}
-          <p>{{ post.date | date: "%B %-d, %Y" }}</p>
+          <p class="post-meta">{{ post.date | date: "%B %-d, %Y" }}</p>
         {% endif %}
         {% if post.excerpt %}
-          <p>{{ post.excerpt | strip_html | truncatewords: 30 }}</p>
+          <p class="post-excerpt">{{ post.excerpt | strip_html | truncatewords: 30 }}</p>
         {% endif %}
       </li>
     {% endfor %}

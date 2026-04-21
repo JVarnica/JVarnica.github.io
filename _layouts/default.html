@@ -12,6 +12,147 @@
     <link rel="stylesheet" type="text/css" href="{{ site.baseurl }}/style.css" />
     <link rel="alternate" type="application/rss+xml" title="{{ site.name }} - {{ site.description }}" href="{{ site.baseurl }}/feed.xml" />
 
+        <style>
+      /* ── Project cards ── */
+      .projects-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin-top: 1.5rem;
+      }
+ 
+      .project-card {
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 1.5rem;
+        transition: box-shadow 0.2s ease, transform 0.2s ease;
+        background: #fff;
+      }
+ 
+      .project-card:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transform: translateY(-2px);
+      }
+ 
+      .project-card h2,
+      .project-card h3 {
+        margin-top: 0;
+        margin-bottom: 0.5rem;
+      }
+ 
+      .project-card h2 a,
+      .project-card h3 a {
+        text-decoration: none;
+        color: #333;
+      }
+ 
+      .project-card h2 a:hover,
+      .project-card h3 a:hover {
+        color: #4183C4;
+      }
+ 
+      .project-card p {
+        color: #666;
+        font-size: 0.95rem;
+        line-height: 1.5;
+        margin: 0;
+      }
+ 
+      /* ── Blog post list ── */
+      .post-list {
+        list-style: none;
+        padding: 0;
+      }
+ 
+      .post-list li {
+        border-bottom: 1px solid #eee;
+        padding: 1.25rem 0;
+      }
+ 
+      .post-list li:last-child {
+        border-bottom: none;
+      }
+ 
+      .post-list h2 {
+        margin: 0 0 0.25rem 0;
+        font-size: 1.3rem;
+      }
+ 
+      .post-list h2 a {
+        text-decoration: none;
+        color: #333;
+      }
+ 
+      .post-list h2 a:hover {
+        color: #4183C4;
+      }
+ 
+      .post-list .post-meta {
+        font-size: 0.85rem;
+        color: #999;
+        margin: 0 0 0.4rem 0;
+      }
+ 
+      .post-list .post-excerpt {
+        color: #555;
+        font-size: 0.95rem;
+        line-height: 1.5;
+        margin: 0;
+      }
+ 
+      /* ── Breadcrumb ── */
+      .breadcrumb {
+        font-size: 0.85rem;
+        color: #999;
+        margin-bottom: 0.5rem;
+      }
+ 
+      .breadcrumb a {
+        color: #4183C4;
+        text-decoration: none;
+      }
+ 
+      .breadcrumb a:hover {
+        text-decoration: underline;
+      }
+ 
+      /* ── Project page ── */
+      .project-page img {
+        max-width: 100%;
+        border-radius: 6px;
+        margin: 1rem 0;
+      }
+ 
+      .project-links {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        margin: 1.25rem 0;
+      }
+ 
+      .project-links a {
+        display: inline-block;
+        padding: 0.4rem 1rem;
+        border: 1px solid #4183C4;
+        border-radius: 5px;
+        color: #4183C4;
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: background 0.15s ease, color 0.15s ease;
+      }
+ 
+      .project-links a:hover {
+        background: #4183C4;
+        color: #fff;
+      }
+ 
+      /* ── Active nav link ── */
+      nav a.active {
+        font-weight: bold;
+        color: #333;
+      }
+    </style>
+
     <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
   </head>
 
@@ -27,9 +168,9 @@
           </div>
 
           <nav>
-            <a href="{{ site.baseurl }}/">Blog</a>
-             <a href="{{ '/projects/' | relative_url }}">Projects</a>
-            <a href="{{ site.baseurl }}/about">About</a>
+            <a href="{{ '/blog/' | relative_url }}">Blog</a>
+            <a href="{{ '/projects/' | relative_url }}">Projects</a>
+            <a href="{{ '/about/' | relative_url }}">About</a>
           </nav>
         </header>
       </div>
