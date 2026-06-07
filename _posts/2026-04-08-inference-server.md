@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "How I made a vllm docker inference server"
-date: 2026-03-24
+date: 2026-04-20
 categories: [backend, vLLM, auth, inference, agent]
 tags: [docker, vllm, qdrant, redis, sql, jwt]
 project: execuchat
@@ -208,73 +208,6 @@ So now before each message the latest pairs are recieved from the Redis List in 
     messages.append({"role": "user", "content": current_message}) 
 ```
 In theory this worked well but in practise it did not, had to improve the search mechanism. 
-
-### Problem 7 : Why search not good yet & context improvement
-
-Context is all per request currently. The injected rag and search context are added in build_prompt but then they are not stored anywhere.Thus a redis list is used to store this context for rag its useful as turn 1 you have the query it gets most similar chunks then this text is stored in redis so can be accessed every turn of that convo. This is useful as can switch topics and still have the information on topic one, when new query would not embed as lot of noise in prompt after turns. Currently this has worked out fine for retrieved context from conversations, but not for search. 
-
-When search context is injected as a system message the model sees it and can answer the first question, but the next ones not aswell compared to when search is added as a tool call (more on this later). It wasn't coherent as has the search context but no clue why it has searched, so leaving toggle on and trying to converse would always search so couldn't really have multiple turn conversations. This is probably because of prompting aswell so added a search grounding prompt telling it how to use the search data and this improved it considerably.
-
-#### SearXNG is insufficient 
-
-Furthermore before this though searXNG is very good meta search engine so will give you urls for your queries but the content is not even a summary basically just says the title. This is an issue as the model doesn't have enough information to work from, can be seen in the figure below. Figure 2 asks it to answer based on current knowleadge then I use search but as you can see the model doesn't even use the search results (why i made grounding prompt and date in system prompt)
-
-![alt text](/images/bad_results_sr.jpg)
-![alt text](/images/Screenshot_20260408_113410_Execu_Chat.jpg)
-
-Okay so not enough information from content, how much information does it give lets check here the query was, "what were the round 16 champions league results" and here is the full output. As you can see below it doesn't even tell you the results basically its content field which we are getting is just showing the title. At least you get 10 results so model can get a jist of results (fig 2) but its not a good answer.  
-```
-  "url": "https://www.nbcsports.com/soccer/news/uefa-champions-league-schedule-knockout-round-fixtures-path",
-  "title": "UEFA Champions League knockout phase schedule: Fixtures, dates, kick off times, full details - NBC Sports",
-  "content": "And then there were only eight teams left in the 2025-26 UEFA Champions League following the completion of the round of 16. MORE — UEFA Champions League league phase final table Yes, we're into the thick of it now, but only two Premier League teams are still in the race for the European Cup after four were bounced in the last 16.",
-  "engine": "brave",
-  "parsed_url": [
-    "https",
-    "www.nbcsports.com",
-    "/soccer/news/uefa-champions-league-schedule-knockout-round-fixtures-path",
-    "",
-    "",
-    ""
-  ],
-  "engines": [
-    "startpage",
-    "duckduckgo",
-    "brave"
-  ],
-  "score": 4.0,
-  "category": "general"
-}
-```
-
-So the solution is to use a search engine not a html parser such as beautful soup, so trafilatura was used from the links given by searxng. Here is the result from trafilatura (only a part):
-```
- Trafilatura extraction (3367 chars):
-  And then there were only eight teams left in the 2025-26 UEFA Champions League following
-  the completion of the round of 16.
-  MORE — UEFA Champions League league phase final table
-  Yes, we’re into the thick of it now, but only two Premier League teams are still in the
-  race for the European Cup after four were bounced in the last 16. Those teams are
-  Arsenal and Liverpool, and they can’t meet until the final on May 31 in Budapest,
-  Hungary.
-  Chelsea were thrashed and hammered by defending champs PSG, 8-2. Manchester City were
-  battered by Real Madrid, 5-1. Newcastle kept Barcelona close for 135 minutes, but the
-  tie ended 8-3 at Camp Nou. Interestingly enough, Tottenham Hotspur’s two-goal defeat
-  (7-5) to Atletico Madrid was the most respectable scoreline of the lot.
-  Full UEFA Champions League knockout phase fixtures
-  UEFA Champions League quarterfinals
-  First legs
-  Tuesday, April 7
-  Real Madrid 1-2 Bayern Munich — Recap, video highlights
-  Sporting Lisbon 0-1 Arsenal — Recap, video highlights
-  Wednesday, April 8
-  PSG 2-0 Liverpool — Recap, video highlights
-  Barcelona 0-2 Atletico Madrid — Recap, video highlights
-  Second legs
-  Tuesday, April 14........
-```
-As you can see there is so much more information when using trafilatura, that you only need to scrape a few searches from searxng and pay attention to context bloat cannot give it full content, so each url has maximum of 2000 chars for 10,000 max char context this is just ruff but so has enough information to make decisions.
-
-This made a huge difference with the grounding prompt now the model has more data so it can answer for complex questions and give much more detail, however it was still struggling with multi-turn conversation. It would just search every prompt into a query, as you can imagine this is an issue as with conversations you have connecting sentences which would make no sense to search such as, "yes thats true thanks for the information." Thus, the solution is to tell the model when it needs to search so it becomes agentic, the way it is done is through a tool schema and a loop so can evaluate on first call whether to call the tool based on the prompt. Making search agentic by having the model decide whether to call the search tool solves this issue well. More info here [/_posts/2026-04-20-agentic-search]
 
 
 ### Conclusion  

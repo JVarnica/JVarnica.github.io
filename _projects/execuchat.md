@@ -10,7 +10,7 @@ server_repo: https://github.com/JVarnica/vllm-server.git
 
 ## Overview
 
-ExecuChat an android app with an offline and online mode:
+ExecuChat is an android app with an offline and online mode, the offline mode was started first wanted to see how well a model could run on a mobile phone. This was successful could run different llama models with whisper and llava; but the limitation was apparent the conversation was stale and could only use its pre-trained knowledge. Not really useful as a chatbot hence online mode was created. 
 
 - **Offline mode**- Executorch vulkan & XNNPACK backend, chat with llama models, and qwen3_4B. Voice to text (asr) using whisper and image understanding using llava. 
 
@@ -18,9 +18,9 @@ ExecuChat an android app with an offline and online mode:
 
     +  **stream chat vLLM**, for inference stream Qwen3-4B-NVFP4 responses
     +  **SearxNG**, the search engine to access web content
-    +  **Deep Research**, search online and give out a detailed report on findings
+    +  **Research agent**, research-agent container
     +  **Auth/JWT**, authentication using JWT tokens so 30 mins session with silent refresh 
-    +  **Redis**, to store conversation as pair list so can chunk for context management. 
+    +  **Redis**, to store session context 
     +  **Redis stream**, to queue the text chunks so can be retrieved and embedded.
     +  **Saved convos**, save to sqlite database using asynchronous sqlite for multiple users
     +  **RAG**, uses Qdrant to store Redis embeddings persistently, and then retrieve with query. 
@@ -31,11 +31,10 @@ How coherent & intelligent are models on smartphones, how large can they be? Is 
 
 ## Architecture Diagram (Online/Server)
 
-/images/architecture-diagram.svg
+![Architecture diagram]({{ '/images/architecture-diagram.svg' | relative_url }})
 
 ## GIFs 
 
-//TODO OF FINISHED VERSION. 
 
 
 ## Related repositories
@@ -44,6 +43,7 @@ For more details on the Android app look at the Execuchat repository, combines b
 
 - Main Android app ![alt text](https://github.com/JVarnica/Execu_Chat)
 - Docker/ python server ![alt text](https://github.com/JVarnica/vllm-server)
+- research agent ![alt text](https://github.com/JVarnica/research-agent)
 
 ## Blog posts 
 
