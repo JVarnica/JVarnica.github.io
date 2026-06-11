@@ -10,7 +10,7 @@ server_repo: https://github.com/JVarnica/vllm-server.git
 
 ## Overview
 
-ExecuChat is an android app with an offline and online mode, the offline mode was started first wanted to see how well a model could run on a mobile phone. This was successful could run different llama models with whisper and llava; but the limitation was apparent the conversation was stale and could only use its pre-trained knowledge. Not really useful as a chatbot hence online mode was created. 
+ExecuChat is an android app with an offline and online mode, the offline mode was started first as wanted to see how well a model could run on a mobile phone. This was successful could run different llama models with whisper and llava; but the limitation was apparent the conversation was stale and can oly use its pre-trained knowledge. Not really useful as a working chatbot hence online mode was created. 
 
 - **Offline mode**- Executorch vulkan & XNNPACK backend, chat with llama models, and qwen3_4B. Voice to text (asr) using whisper and image understanding using llava. 
 
@@ -35,20 +35,38 @@ How coherent & intelligent are models on smartphones, how large can they be? Is 
 
 ## GIFs 
 
+### Offline mode — Llama 3B 
+<video src="{{ '/videos/llama3B_vulkan.mp4' | relative_url }}"
+       autoplay loop muted playsinline
+       style="max-width: 360px; border-radius: 12px; display: block;">
+</video>
 
+### Online mode — Qwen3_8B 
+#### /chat
+<video src="{{ '/videos/execu_chat_demo_720p.mp4' | relative_url }}"
+       autoplay loop muted playsinline
+       style="max-width: 360px; border-radius: 12px; display: block;">
+</video>
+
+#### /research-agent
+<video src="{{ '/videos/roman_emp_dp_varspeed.mp4' | relative_url }}"
+       autoplay loop muted playsinline
+       style="max-width: 360px; border-radius: 12px; display: block;">
+</video>
 
 ## Related repositories
 
 For more details on the Android app look at the Execuchat repository, combines both UIs into one app.  For the details on the docker server look at the python-server. 
 
-- Main Android app ![alt text](https://github.com/JVarnica/Execu_Chat)
-- Docker/ python server ![alt text](https://github.com/JVarnica/vllm-server)
-- research agent ![alt text](https://github.com/JVarnica/research-agent)
+- Main Android app [Execu_Chat](https://github.com/JVarnica/Execu_Chat)
+- Docker/ python server [vllm-server](https://github.com/JVarnica/vllm-server)
+- research agent [research-agent](https://github.com/JVarnica/research-agent)
 
 ## Blog posts 
 
 To understand the repositories, explain challenges and improvements blog posts are written. For example one is written on the docker server for vLLM and the challenges faced when building for multiple users, next why vLLM was used for inference and what configurations used. The blog posts:
 
-- **why & inference vLLM**- /_posts/2026-03-24-inference.md
-- **Building a chatbot API vLLM**- /home/julien/Documents/JVarnica.github.io/_posts/2026-04-08-inference-server.md
+- **why & inference vLLM**-[inference.md](/_posts/2026-03-24-inference.md)
+- **Part 1:Building a chatbot with vLLM** — [inference-server.md](/_posts/2026-04-08-inference-server.md)
+- **Part 2: Web Search Tool** - [agentic-search.md](/_posts/2026-04-20-agentic-search.md)
 

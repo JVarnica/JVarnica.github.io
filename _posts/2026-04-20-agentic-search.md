@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Web Search Tool "
+title: "Part 2: Web Search Tool "
 date: 2026-04-20
 categories: [backend, vLLM, auth, inference, agent]
 tags: [docker, vllm, redis, sql, jwt]
