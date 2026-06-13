@@ -14,3 +14,4 @@ Self-taught programmer with an economics background, I write blogs about what I 
 ### Contact me
 
 [varnicajulien@gmail.com](mailto:varnicajulien@gmail.com)
+[Github  @JVarnica](https://github.com/JVarnica)
