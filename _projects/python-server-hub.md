@@ -1,14 +1,13 @@
 ---
-layout: page
+layout: project
 title: Python Server
-permalink: /projects/python-server/
+slug: docker inference server
+summary: A self-hosted FastAPI inference gateway with vLLM, Redis, Qdrant, and SearxNG — powering the online mode of ExecuChat for multi-user streaming chat, RAG, and web search.
 ---
 
 # Python Server
 
-A self-hosted LLM backend built for multi-user access — handles inference, search, RAG, authentication, and a deep research agent as independent containerised services.
-
-This is the backend server for [ExecuChat](/projects/execuchat/) system.
+A self-hosted LLM backend server built with vllm for multi-user access, has search, RAG, and deep research capabilities. This is the backend server for [ExecuChat](/projects/execuchat/) system. The whole backend runs as a single Docker Compose stack. Every service sits on an internal bridge network; only the gateway (`8080`), Prometheus (`9090`), and Grafana (`3000`) are exposed to the host.
 
 ---
 
@@ -27,19 +26,28 @@ On-device inference tops at ~3B models on high-end consumer phones, which is too
 
 | Service | Technology |
 |---|---|
-| API Gateway | FastAPI (async) |
-| Inference | vLLM — Qwen3-8B-NVFP4 |
-| Auth | JWT — 30 min sessions, silent refresh |
-| Session context | Redis |
-| Search | SearxNG (self-hosted) |
-| chunking async | Redis Streams |
-| Vector store | Qdrant |
-| Saved conversations | SQLite (async) |
-| Research agent | LangGraph, containerised |
-| Deployment | Docker Compose |
-| Monitoring | Prometheus |
+| API Gateway | FastAPI (async) | Entry point, Routing |expose `8080` | 
+| Inference | vLLM — Qwen3-8B-NVFP4 | OpenAI compatible |expose `8000`|
+| Auth | JWT — 30 min sessions, silent refresh | expose `8090` |
+| Redis | redis:8-alpine |Session Context, queue, streams| expose `6379` | 
+| Search | SearxNG | Metasearch, JSON API |expose `8080`| 
+| Research_agent| LangGraph, research, report, events | expose `8001`
+| Qdrant | Vector store | Retrieval, embeddings| expose `6333` |
+| Prometheus | Metrics collection | ports `9090` |
+| Grafana | Dashboards of metrics | ports `3000` | 
+
+No database used as aioSQLite is sufficient for small amount of users. 
 
 ---
+
+## Prerequisites  
+
+- Linux (tested on Ubuntu 24.04)
+- NVIDIA GPU with 16 GB+ VRAM (built for an RTX 5060 Ti, SM 12.0 Blackwell)
+- NVIDIA Container Toolkit (for GPU passthrough into the vLLM container)
+- Docker & Docker Compose
+- A Hugging Face token (to pull the model weights)
+
 
 ## Key Design Decisions
 
@@ -57,7 +65,7 @@ On-device inference tops at ~3B models on high-end consumer phones, which is too
 
 **Async chunking** - Needed chunking to happen in a background process while conversing so no block when trying to save the chat. So before chat call finishes the pair turn gets appended to redis, with overlapping windows for chunking. Each chunk id is added to the Redis stream, while chunks are added to hash sets so embedding json can be added when available.
 
-- More information on the following discussed decisions can be found in the blog post about building a inference server [here]({{ site.baseurl }}{% post_url 2026-04-08-inference %}).
+- More information on the following discussed decisions can be found in the blog post about building a inference server [here]({{ site.baseurl }}{% post_url 2026-04-08-inference-server %}).
 
 **Web Search Tool** - Model needs to know why it has searched, and as Qwen3 has been trained to use tools; it is a lot more effective than context injection. More details in the [agentic search blog post]({{ site.baseurl }}{% post_url 2026-04-20-agentic-search %}).
 
@@ -66,12 +74,16 @@ On-device inference tops at ~3B models on high-end consumer phones, which is too
 ## Repository
 
 [vllm-server on GitHub](https://github.com/JVarnica/vllm-server)
+[research-agent](/_projects/research-agent-hub.md)
 
 ---
 
 ## Related Blog Posts
 
-- [Why vLLM as inference engine]({{ site.baseurl }}{% post_url 2026-03-24-inference %})
-- [How I made a vLLM Docker inference server]({{ site.baseurl }}{% post_url 2026-04-08-inference-server %})
-- [Making a Research Agent using LangGraph]({{ site.baseurl }}{% post_url 2026-03-24-Research-agent %})
-- [Incrementally Building Research Agents]({{ site.baseurl }}{% post_url 2026-05-27-Building-research-agent %})
+- [Why vLLM as inference engine](/_posts/2026-03-24-inference.md)
+- [How I made a vLLM Docker inference server](/_posts/2026-04-08-inference-server.md)
+- [Search with Tool Use](/_posts/2026-04-20-agentic-sear.md)
+- [Making a Research Agent using LangGraph](/_posts/2026-05-25-Research-agent.md)
+- [Incrementally Building Research Agents](/_posts/2026-05-27-Building-research-agent.md)()
+
+

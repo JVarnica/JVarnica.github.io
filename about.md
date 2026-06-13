@@ -4,12 +4,13 @@ title: About
 permalink: /about/
 ---
 
-Some information about you!
+Hi, I'm Julien, I have an interest in making intelligence accessible, so build AI systems with open-sourced models whether on-device or self-hosted server.
 
-### More Information
+- Currently open to roles. Based in Milton Keynes, UK
+- open to working in-office, remote or hybrid
 
-A place to include any other types of information that you'd like to include about yourself.
+Self-taught programmer with an economics background, I write blogs about what I learn and build [blog](/blog/). 
 
 ### Contact me
 
-[email@domain.com](mailto:email@domain.com)
+[varnicajulien@gmail.com](mailto:varnicajulien@gmail.com)

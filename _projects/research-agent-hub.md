@@ -1,28 +1,25 @@
 ---
-layout: page
-title: Deep Research Agent
-permalink: /projects/research-agent/
+layout: project
+title: Research Agent
+slug: reasearch-agent
+summary: A research angent using LangGraph, takes a query then gathers information so can output a markdown report
 ---
 
 # Deep Research Agent
 
-An agentic search system built with LangGraph, takes a query and outputs a report. 
-
-A containerised agentic research system built with LangGraph — takes a query, runs iterative web research loops, and produces a structured, cited report. Designed to be frontend-agnostic, communicating entirely through SSE events.
+An agentic search system built with LangGraph, takes a query and outputs a report. It is frontend agnostic, just emits events onto a Redis List which is then polled by the client. Given a research question, the agent plans a set of search queries, these queries are searched and the urls are then scraped and triaged into Documents for summarizing. From the docs a set of factual topic claims are made with sources, so can map docs to a specific topic. The evidence gathered is reflected upon whether it is sufficient or not, if not loops back with follow-up queries, if sufficient then goes to writing the report.
 
 Currently consumed by [ExecuChat](/projects/execuchat/) but deployable independently with any frontend.
 
----
-
-## What It Does
-
-Given a research question, the agent plans a set of search queries, scrapes and summarises the results, extracts factual claims with source attribution, reflects on whether the evidence is sufficient, and either loops with follow-up queries or writes the final report. Each phase emits events in real time so the client can show progress as it happens.
-
----
+#### /research-agent
+<video src="{{ '/videos/roman_emp_dp_varspeed.mp4' | relative_url }}"
+       autoplay loop muted playsinline
+       style="max-width: 360px; border-radius: 12px; display: block;">
+</video>
 
 ## Architecture
 
-The system is built as a LangGraph graph with a Redis-backed worker queue. Tasks are submitted via a FastAPI endpoint and processed asynchronously — the client connects to an SSE stream and receives events as the graph progresses through each node.
+The system is built as a LangGraph graph with a Redis-backed worker queue. Tasks are submitted via a FastAPI endpoint and processed asynchronously — the client connects to the polling endpoint which is called every 0.5 seconds, and receives events as the graph progresses through each node.
 
 ```
 Query → Plan queries → [Search → Scrape → Summarise → Extract claims] → Reflect → Loop? → Write sections → Stitch report
@@ -63,9 +60,8 @@ The graph uses a typed `OverallState` with custom reducers for parallel-safe acc
 ## Stack
 
 - **LangGraph** — graph compilation and state management
-- **FastAPI** — task submission and SSE streaming endpoints
-- **Redis** — worker queue and task state storage
-- **Docker** — containerised for standalone deployment
+- **FastAPI** — lifecycle and API endpoints
+- **Redis** — data in different Redis structures
 
 ---
 
@@ -77,6 +73,6 @@ The graph uses a typed `OverallState` with custom reducers for parallel-safe acc
 
 ## Related Blog Posts
 
-- [Making a Research Agent using LangGraph]({{ site.baseurl }}{% post_url 2026-03-24-Research-agent %})
+- [Making a Research Agent using LangGraph]({{ site.baseurl }}{% post_url 2026-05-25-Research-agent %}).
 - [Incrementally Building Research Agents]({{ site.baseurl }}{% post_url 2026-05-27-Building-research-agent %})
-- [Web Search Tool]({{ site.baseurl }}{% post_url 2026-04-20-agentic-search %})
+

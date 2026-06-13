@@ -1,7 +1,8 @@
 ---
-layout: page
+layout: project
 title: Caltech256 Classification
-permalink: /projects/caltech256/
+slug: image-classification
+summary: Image classification task comparing models with different fine-tuning, data augmentations, and quantization (QAT & PTQ).
 ---
 
 # Caltech256 Classification

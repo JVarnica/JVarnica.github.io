@@ -601,8 +601,9 @@ One more thing the model's current understanding of the research is also added, 
         },
     ])
 ```   
+## Conclusion
 
-This was the iterative process on how I went with building this research agent, this could be optimized a lot further I feel as 5 minutes is too long for the lack of urls searched, this is also due to only having a gpu with 16GB VRAM. Honestly the model is too small anyway to get proper prose and not feel a bit empty, but the extensive schema use was needed as Qwen3-8B won't follow as well as other bigger models.
+This was the iterative process on how I went with building this research agent, this could be optimized a lot further I feel as 5 minutes is too long for the lack of urls searched, this is also due to only having a gpu with 16GB VRAM. Honestly the model is too small anyway to get proper prose and not feel a bit empty, but the extensive schema use was needed as Qwen3-8B would otherwise drift off.
 
 
 

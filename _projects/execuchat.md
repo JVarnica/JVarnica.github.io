@@ -48,11 +48,6 @@ How coherent & intelligent are models on smartphones, how large can they be? Is 
        style="max-width: 360px; border-radius: 12px; display: block;">
 </video>
 
-#### /research-agent
-<video src="{{ '/videos/roman_emp_dp_varspeed.mp4' | relative_url }}"
-       autoplay loop muted playsinline
-       style="max-width: 360px; border-radius: 12px; display: block;">
-</video>
 
 ## Related repositories
 
@@ -61,6 +56,9 @@ For more details on the Android app look at the Execuchat repository, combines b
 - Main Android app [Execu_Chat](https://github.com/JVarnica/Execu_Chat)
 - Docker/ python server [vllm-server](https://github.com/JVarnica/vllm-server)
 - research agent [research-agent](https://github.com/JVarnica/research-agent)
+
+For a detailed breakdown of the server architecture, inference configuration, and multi-user design decisions, see the [Python Server hub](/projects/python-server-hub.md/).
+For detailed breakdown of research-agent architecture, see [Research Agent hub](/_projects/research-agent-hub.md).
 
 ## Blog posts 
 
