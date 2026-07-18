@@ -7,7 +7,7 @@ summary: A research angent using LangGraph, takes a query then gathers informati
 
 # Deep Research Agent
 
-An agentic search system built with LangGraph, takes a query and outputs a report. It is frontend agnostic, just emits events onto a Redis List which is then polled by the client. Given a research question, the agent plans a set of search queries, these queries are searched and the urls are then scraped and triaged into Documents for summarizing. From the docs a set of factual topic claims are made with sources, so can map docs to a specific topic. The evidence gathered is reflected upon whether it is sufficient or not, if not loops back with follow-up queries, if sufficient then goes to writing the report.
+An autonomous LangGraph agent: plans queries, searches in parallel, extracts and merges claims, reflects on gaps, and writes a structured markdown report. It is frontend agnostic, just emits events onto a Redis List which is then polled by the client. Given a research question, the agent plans a set of search queries, these queries are searched and the urls are then scraped and triaged into Documents for summarizing. From the docs a set of factual topic claims are made with sources, so can map docs to a specific topic. The evidence gathered is reflected upon whether it is sufficient or not, if not loops back with follow-up queries, if sufficient then goes to writing the report.
 
 Currently consumed by [ExecuChat](/projects/execuchat/) but deployable independently with any frontend.
 

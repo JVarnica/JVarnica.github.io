@@ -5,6 +5,9 @@
 # Name of your site (displayed in the header)
 name: Julien Varnica 
 
+title: AI Engineer
+
+description: "Self-taught AI engineer: LLM serving, agents, on-device inference. Projects and write ups"
 
 # Includes an icon in the footer for each username you enter
 footer-links:

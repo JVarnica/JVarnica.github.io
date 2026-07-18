@@ -1,11 +1,11 @@
 ---
 layout: project
-title: Python Server
+title: LLM Inference Server
 slug: docker inference server
 summary: A self-hosted FastAPI inference gateway with vLLM, Redis, Qdrant, and SearxNG — powering the online mode of ExecuChat for multi-user streaming chat, RAG, and web search.
 ---
 
-# Python Server
+# LLM Server Backend 
 
 A self-hosted LLM backend server built with vllm for multi-user access, has search, RAG, and deep research capabilities. This is the backend server for [ExecuChat](/projects/execuchat/) system. The whole backend runs as a single Docker Compose stack. Every service sits on an internal bridge network; only the gateway (`8080`), Prometheus (`9090`), and Grafana (`3000`) are exposed to the host.
 
