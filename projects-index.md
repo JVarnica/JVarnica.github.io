@@ -6,15 +6,15 @@ permalink: /projects/
 
 ## [ExecuChat](/projects/execuchat/)
 
-A dual-mode Android AI chat app — offline inference on device via ExecuTorch, and an online mode backed by a self-hosted LLM gateway with streaming chat, web search, RAG, and a deep research agent.
+A dual-mode Android AI chat app — offline inference on device via ExecuTorch, and an online mode backed by a self-hosted server.
 
-**Android · Kotlin · ExecuTorch · Vulkan**
+**Android · Kotlin · ExecuTorch**
 
 [View project →](/projects/execuchat/)
 
 ---
 
-## [Python Server](/projects/python-server/)
+## [Python Server](/projects/python-server-hub/)
 
 The self-hosted backend powering ExecuChat's online mode — FastAPI gateway with JWT auth, vLLM inference, Redis session management, SearxNG search, and Qdrant RAG. Built for multi-user correctness with streaming via Redis Streams.
 

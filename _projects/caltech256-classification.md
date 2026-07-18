@@ -7,6 +7,7 @@ summary: Image classification task comparing models with different fine-tuning, 
 
 # Caltech256 Classification
 
+
 A systematic investigation into transfer learning for vision models — comparing architectures, fine-tuning strategies, data augmentation, and quantization across two datasets.
 
 ## Overview

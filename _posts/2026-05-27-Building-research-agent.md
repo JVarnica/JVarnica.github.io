@@ -519,7 +519,9 @@ This did make the separation of concerns clearer as scraping now has its own nod
 
 The results for this research task is here it is about Brexit: [events_9](https://github.com/JVarnica/research-agent/events_ntriage.txt) & [artifacts](https://github.com/JVarnica/research-agent/artfcs_ntriage.txt). This is the final result and there were changes done to other nodes before triaging was attempted these will be mentioned here. For report with these changes about Byzantine empire so same subject is events_log8 mentioned above.
 
-Triaging was removed so the summarization node will continue triaging based on relevancy, first not relevant docs takes 5.1 secs from 41.5 to 46.6 ts, then first relevant doc is at 138.8 secs until summarization is finished at 207.3 seconds which is nearly three and half minutes, instead of 232 seconds. So it is 20 seconds quicker so not too much, but for user experience not being stuck triaging at beginning is better.
+Triaging was removed so the summarization node will continue triaging based on relevancy like before. Having a call to vllm with just title, url and SearXNG content which is a small amount of tokens; I thought would work. But with one gpu its the number of requests queued not their own individual length, 150 docs each one a seperate call for example.  
+
+Now for events_9 first not relevant docs takes 5.1 secs from 41.5 to 46.6 ts, then first relevant doc is at 138.8 secs until summarization is finished at 207.3 seconds which is nearly three and half minutes, instead of 232 seconds. So it is 20 seconds quicker so not too much, but for user experience not being stuck triaging at beginning is better.
 
 The previous reports also felt quite flat not enough substance to it, this comes from the claims being the only thing the writer sees. This is silly as document_summaries have all the details: the overview, key findings and quotes; so even when making claims longer there was a lot less information and just added to context bloat. So now the writer will see doc_summaries alongside the claims. The claims are now just topic labels pointing to each doc_summary in that topic, this can be seen on the claim below.
 
@@ -603,7 +605,13 @@ One more thing the model's current understanding of the research is also added, 
 ```   
 ## Conclusion
 
-This was the iterative process on how I went with building this research agent, this could be optimized a lot further I feel as 5 minutes is too long for the lack of urls searched, this is also due to only having a gpu with 16GB VRAM. Honestly the model is too small anyway to get proper prose and not feel a bit empty, but the extensive schema use was needed as Qwen3-8B would otherwise drift off.
+This was the iterative process on how I went with building this research agent, this could be optimized further in numerous ways. First it is slow for the amount of urls searched, as it is gpu bound based on requests not length as previosuly mentioned. The solution is to use a much smaller model which isn't a LLM but a cross-encoder which detects similarity between question and doc, by embedding them together. 
+
+This makes a huge difference as currently will read lots of docs and most will be junk this is a waste of time, but with this triaging there should only be relevant documents. Thus, the summarization check would go from 100 docs to 20 for example; as SearXNG gives a lot of keyword matches. The cross-encoder would catch this easily as would know the dictionary for why is not relevant to question on Byzatium for example. 
+
+The graph has changed greatly from its first iteration, the main difference was in the nodes; now the schema dictates more how it needs to answer and use the information so the small LLM doesn't drift. However the main limitation is the current hardware of 16GB VRAM, can only use Qwen3-8B as need to leave enough room for kv-cach. This means the prose feels more encyclopedic and repetitive, but this is just a limitation of the model, need to use a bigger one to solve this.
+
+This was a rather interesting project as what I thought would work well hasn't and been rather difficult to constrain it to within 16GB. 
 
 
 
