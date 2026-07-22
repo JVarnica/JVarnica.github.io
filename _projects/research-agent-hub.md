@@ -1,8 +1,8 @@
 ---
 layout: project
 title: Research Agent
-slug: reasearch-agent
-summary: A research angent using LangGraph, takes a query then gathers information so can output a markdown report
+summary: "Autonomous LangGragh agent: plans queries, searches in parallel, extracts and merges claims, reflect on gaps, and writes a structured markdown report"
+github: https://github.com/JVarnica/Execu_Chat
 ---
 
 # Deep Research Agent

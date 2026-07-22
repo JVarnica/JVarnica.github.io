@@ -10,8 +10,7 @@ project: execuchat
 ### vLLM why?
 You cannot use naive Pytorch for model inference, it is used for model training. So vLLM was used as it uses PyTorch under the hood TorchAO for quantization and
 torch.compile to optimize the model graph which has significant speedups (1.05x to 1.9x). Therefore using vLLM you are able to use a variety of HuggingFace models
-with various quantization AWQ, INT4, FP8, NVFP4, you just change the URL to point to that repo. So it is simple to use, TensorRT the next option also from nvidia is now easy
-to set up as an OAI compatible server aswell.
+with various quantization AWQ, INT4, FP8, NVFP4, you just change the URL to point to that repo. So it is simple to use, TensorRT the next option also from nvidia is now easy to set up as an OAI compatible server aswell.
 
 Both are quick because of inference techniques with TensorRT being slighlty quicker, but it doesn't have compatibility with new models as quickly as vLLM. Hence, for prototyping vLLM
 is better as switching models is easy, this simplicity is its main advantage. The vLLM release I am using is Nvidia's 25.12 vLLM release

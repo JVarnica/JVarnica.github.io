@@ -3,10 +3,10 @@ layout: project
 title: Caltech256 Classification
 slug: image-classification
 summary: Image classification task comparing models with different fine-tuning, data augmentations, and quantization (QAT & PTQ).
+github: https://github.com/JVarnica/Caltech256_classification
 ---
 
 # Caltech256 Classification
-
 
 A systematic investigation into transfer learning for vision models — comparing architectures, fine-tuning strategies, data augmentation, and quantization across two datasets.
 

@@ -5,7 +5,7 @@
 # Name of your site (displayed in the header)
 name: Julien Varnica 
 
-title: AI Engineer
+title: "Julien Varnica - AI Engineer"
 
 description: "Self-taught AI engineer: LLM serving, agents, on-device inference. Projects and write ups"
 
@@ -17,7 +17,7 @@ footer-links:
   flickr:
   github: JVarnica
   instagram:
-  linkedin: 
+  linkedin: julien-varnica
   pinterest:
   rss: # just type anything here for a working RSS icon
   twitter: 
@@ -34,7 +34,7 @@ google_analytics:
 
 # Your website URL (e.g. http://barryclark.github.io or http://www.barryclark.co)
 # Used for Sitemap.xml and your RSS feed
-url: https://JVarnica.github.io
+url: https://jvarnica.github.io
 
 # If you're hosting your site at a Project repository on GitHub pages
 # (http://yourusername.github.io/repository-name)

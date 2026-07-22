@@ -1,9 +1,7 @@
 ---
 layout: project
 title: ExecuChat
-slug: execuchat
 summary: A dual-mode Android AI chat app with on-device inference via ExecuTorch and optional online mode through a self-hosted gateway.
-image: /images/execuchat-arch.png
 github: https://github.com/JVarnica/Execu_Chat.git
 server_repo: https://github.com/JVarnica/vllm-server.git
 ---

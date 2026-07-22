@@ -1,19 +1,19 @@
 ---
 layout: project
 title: LLM Inference Server
-slug: docker inference server
 summary: A self-hosted FastAPI inference gateway with vLLM, Redis, Qdrant, and SearxNG — powering the online mode of ExecuChat for multi-user streaming chat, RAG, and web search.
+github: https://github.com/JVarnica/vllm-server
 ---
 
 # LLM Server Backend 
 
-A self-hosted LLM backend server built with vllm for multi-user access, has search, RAG, and deep research capabilities. This is the backend server for [ExecuChat](/projects/execuchat/) system. The whole backend runs as a single Docker Compose stack. Every service sits on an internal bridge network; only the gateway (`8080`), Prometheus (`9090`), and Grafana (`3000`) are exposed to the host.
+A self-hosted LLM backend server built with vllm for multi-user access: has search, RAG, and deep research capabilities. This is the backend server for [ExecuChat](/projects/execuchat/) system. The whole backend runs as a single Docker Compose stack. Every service sits on an internal bridge network - only the gateway (`8080`), Prometheus (`9090`), and Grafana (`3000`) are exposed to the host.
 
 ---
 
 ## Why
 
-On-device inference tops at ~3B models on high-end consumer phones, which is too small for proper conversations. Thus, a server was built to run larger models, with persistent memory and web search capabilities. The model used is Qwen3-8B on a 5060ti with 16 GB VRAM, more details for this decision can be found [here](/_posts/2026-03-24-inference.md). The main challenge was making it available to multiple users, this meant a gateway so can isolate each chat session for that user. A dedicated database is also needed, as offline only files as storage is sufficient.
+On-device inference tops at ~3B models on high-end consumer phones, which is too small for proper conversations. Thus, a server was built to run larger models, with persistent memory and web search capabilities. The model used is Qwen3-8B-NVFP4 on a 5060ti with 16 GB VRAM, more details for this decision can be found [here](/_posts/2026-03-24-inference.md). The main challenge was making it available to multiple users, this meant a gateway to isolate each chat session for that user. A dedicated database is also needed, as offline only uses files as storage is insufficient for users as locks on read/write. 
 
 ---
 ## Architecture Diagram (Online/Server)
@@ -57,17 +57,17 @@ No database used as aioSQLite is sufficient for small amount of users.
 
 **Chat persistence via AioSQLite** - Accessing the data efficiently is now important, can't keep using a file system (single user), so SQLite is used. Though it can only do a single READ/WRITE at a time, this is where aiosqlite comes in as its asynchronous so doesn't block.
 
-**RAG via Qdrant** — Didn't want to have to worry about indexing and retrieval, needed persistent storage, and for it to be a service easy to start as a docker container. Qdrant fit those perfectly and had seperation between embedding and normal chat, postgre could have been used for though but more complicated to set up and less reliable i felt.
+**RAG via Qdrant** — Didn't want to have to worry about indexing and retrieval, needed persistent storage, and for it to be a service, easy to start as a docker container. Qdrant fit those perfectly and had separation between embedding and normal chat, postgre could have been used though but more complicated to set up and not a service. 
 
-**Research agent LangGraph** — Separate container will call vllm lots. Emits events (searching, triaging, summarizing, reflecting, planning,...) to client so can see progress. More detail [research agent blog post]({{ site.baseurl }}{% post_url 2026-05-25-Research-agent %}).
+**Research agent via LangGraph** — Separate container as will call vllm itself, didn't want to mix tasks. Emits events (searching, triaging, summarizing, reflecting, planning, writing) by adding to a Redis lists, which is then polled by the client. More detail [research agent blog post]({{ site.baseurl }}{% post_url 2026-05-25-Research-agent %}) and on reasearch-agent hub. 
 
-**JWT security/identification** — API framework as for mobile, so each request goes through gateway to validate token which identifies the user and whether it can access the redis keys. Automatic 30 mins refresh.
+**JWT security/identification** — API framework as for mobile, so each request goes through gateway to validate the token which identifies the user, and whether it can access the redis keys. Automatic 30 mins refresh.
 
-**Async chunking** - Needed chunking to happen in a background process while conversing so no block when trying to save the chat. So before chat call finishes the pair turn gets appended to redis, with overlapping windows for chunking. Each chunk id is added to the Redis stream, while chunks are added to hash sets so embedding json can be added when available.
+**Async chunking** - Needed chunking to happen in a background process while conversing, so doesn't block when trying to save the chat. So before chat call finishes the pair turn gets appended to redis, with overlapping windows for chunking. Each chunk id is added to the Redis stream, while chunks are added to hash sets so embedding json can be added when available.
 
 - More information on the following discussed decisions can be found in the blog post about building a inference server [here]({{ site.baseurl }}{% post_url 2026-04-08-inference-server %}).
 
-**Web Search Tool** - Model needs to know why it has searched, and as Qwen3 has been trained to use tools; it is a lot more effective than context injection. More details in the [agentic search blog post]({{ site.baseurl }}{% post_url 2026-04-20-agentic-search %}).
+**Web Search Tool** - Model needs to know why it has searched, and as Qwen3 has been trained to use tools. This is far more effective than context injection. More details in the [agentic search blog post]({{ site.baseurl }}{% post_url 2026-04-20-agentic-search %}).
 
 ---
 
