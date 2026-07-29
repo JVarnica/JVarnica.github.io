@@ -13,7 +13,7 @@ A self-hosted LLM backend server built with vllm for multi-user access: has sear
 
 ## Why
 
-On-device inference tops at ~3B models on high-end consumer phones, which is too small for proper conversations. Thus, a server was built to run larger models, with persistent memory and web search capabilities. The model used is Qwen3-8B-NVFP4 on a 5060ti with 16 GB VRAM, more details for this decision can be found [here](/_posts/2026-03-24-inference.md). The main challenge was making it available to multiple users, this meant a gateway to isolate each chat session for that user. A dedicated database is also needed, as offline only uses files as storage is insufficient for users as locks on read/write. 
+On-device inference tops at ~3B models on high-end consumer phones, which is too small for proper conversations. Thus, a server was built to run larger models, with persistent memory and web search capabilities. The model used is Qwen3-8B-NVFP4 on a 5060ti with 16 GB VRAM, more details for this decision can be found [here]({{ site.baseurl }}{% post_url 2026-03-24-inference %}). The main challenge was making it available to multiple users, this meant a gateway to isolate each chat session for that user. A dedicated database is also needed, as offline only uses files as storage is insufficient for users as locks on read/write. 
 
 ---
 ## Architecture Diagram (Online/Server)
@@ -71,19 +71,20 @@ No database used as aioSQLite is sufficient for small amount of users.
 
 ---
 
-## Repository
+## Repositoru 
 
-[vllm-server on GitHub](https://github.com/JVarnica/vllm-server)
-[research-agent](/_projects/research-agent-hub.md)
+- [vllm-server](https://github.com/JVarnica/vllm-server)
+- [research-agent](https://github.com/JVarnica/research-agent)
 
 ---
 
 ## Related Blog Posts
 
-- [Why vLLM as inference engine](/_posts/2026-03-24-inference.md)
-- [How I made a vLLM Docker inference server](/_posts/2026-04-08-inference-server.md)
-- [Search with Tool Use](/_posts/2026-04-20-agentic-sear.md)
-- [Making a Research Agent using LangGraph](/_posts/2026-05-25-Research-agent.md)
-- [Incrementally Building Research Agents](/_posts/2026-05-27-Building-research-agent.md)()
+- [Why vLLM as inference engine]({{ site.baseurl }}{% post_url 2026-03-24-inference %})
+- [How I made a vLLM Docker inference server]({{ site.baseurl }}{% post_url 2026-04-08-inference-server %})
+- [Search with Tool Use]({{ site.baseurl }}{% post_url 2026-04-20-agentic-search %})
+- [Making a Research Agent using LangGraph]({{ site.baseurl }}{% post_url 2026-05-25-Research-agent %})
+- [Incrementally Building Research Agents]({{ site.baseurl }}{% post_url 2026-05-27-Building-research-agent %})
+
 
 
