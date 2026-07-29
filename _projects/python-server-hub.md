@@ -24,17 +24,17 @@ On-device inference tops at ~3B models on high-end consumer phones, which is too
 
 ## Stack
 
-| Service | Technology |
-|---|---|
-| API Gateway | FastAPI (async) | Entry point, Routing |expose `8080` | 
-| Inference | vLLM — Qwen3-8B-NVFP4 | OpenAI compatible |expose `8000`|
-| Auth | JWT — 30 min sessions, silent refresh | expose `8090` |
-| Redis | redis:8-alpine |Session Context, queue, streams| expose `6379` | 
-| Search | SearxNG | Metasearch, JSON API |expose `8080`| 
-| Research_agent| LangGraph, research, report, events | expose `8001`
-| Qdrant | Vector store | Retrieval, embeddings| expose `6333` |
-| Prometheus | Metrics collection | ports `9090` |
-| Grafana | Dashboards of metrics | ports `3000` | 
+| Service | Technology | Role | Port |
+|---|---|---|---|
+| API Gateway | FastAPI (async) | Entry point, routing | 8080 |
+| Inference | vLLM — Qwen3-8B-NVFP4 | OpenAI-compatible API | 8000 |
+| Auth | JWT — 30 min sessions, silent refresh | Token issue / refresh | 8090 |
+| Redis | redis:8-alpine | Session context, queue, streams | 6379 |
+| Search | SearxNG | Metasearch, JSON API | 8080 |
+| Research agent | LangGraph | Research, report, events | 8001 |
+| Qdrant | Vector store | Retrieval, embeddings | 6333 |
+| Prometheus | Metrics collection | Scraping service metrics | 9090 |
+| Grafana | Dashboards | Visualising metrics | 3000 |
 
 No database used as aioSQLite is sufficient for small amount of users. 
 

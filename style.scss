@@ -99,6 +99,30 @@ ul ul, ol ul {
   list-style-type: circle;
 }
 
+// Tables inside blog posts
+.post {
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1.5rem 0;
+  }
+
+  th,
+  td {
+    border: 1px solid #ddd;
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+  }
+
+  th {
+    background: #f5f5f5;
+  }
+
+  tr:nth-child(even) {
+    background: #fafafa;
+  }
+}
+
 em, i {
   font-style: italic;
 }

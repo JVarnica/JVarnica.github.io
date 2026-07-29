@@ -14,7 +14,7 @@ A dual-mode Android AI chat app — offline inference on device via ExecuTorch, 
 
 ---
 
-## [Python Server](/projects/python-server-hub/)
+## [LLM Inference Server](/projects/python-server-hub/)
 
 The self-hosted backend powering ExecuChat's online mode — FastAPI gateway with JWT auth, vLLM inference, Redis session management, SearxNG search, and Qdrant RAG. Built for multi-user correctness with streaming via Redis Streams.
 

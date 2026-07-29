@@ -1,6 +1,7 @@
 ---
 layout: post
-title: "Part 2: Web Search Tool "
+title: "Adding a Web Search Tool "
+subtitle: "Qwen3 Hermes Parsing, auto tool choice, and why you shouldn't force search"
 date: 2026-04-20
 categories: [backend, vLLM, auth, inference, agent]
 tags: [docker, vllm, redis, sql, jwt]

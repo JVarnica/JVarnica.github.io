@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Why vLLM as inference engine!!"
+title: "Why vLLM as inference engine"
 date: 2026-03-24
 categories: [backend, vLLM]
 tags: [quantization, vllm, inference, llm]
@@ -18,7 +18,7 @@ Both are fast with their inference optimizations, with TensorRT being slightly q
 
 The following reasons are why vLLM can work as an inference engine:
 
-- **Continuous Batching**: The time consuming part is moving the weights from gpu ram into the cuda cores for computation. With static batching, this loading happens once, after which a batch of prompts is computed, each with its fixed memory block. This is more efficient than doing it sequentially without batching. However, prompts(requests) are of different lengths so computation will finish at different times for each one. This leaves cuda cores sitting idle as finished requests can't be released easily; and the longest to shortest prompt disparancy can be huge. Thus, continuous batching therefore schedules work at the token level rather than batch level. When the last token in a sequence has been computed, another request can takes its place, preventing hardware from sitting idle.
+- **Continuous Batching**: The time consuming part is moving the weights from gpu ram into the cuda cores for computation. With static batching, this loading happens once, after which a batch of prompts is computed, each with its fixed memory block. This is more efficient than doing it sequentially without batching. However, prompts(requests) are of different lengths so computation will finish at different times for each one. This leaves cuda cores sitting idle as finished requests can't be released easily; and the longest to shortest prompt disparity can be huge. Thus, continuous batching therefore schedules work at the token level rather than batch level. When the last token in a sequence has been computed, another request can takes its place, preventing hardware from sitting idle.
 
 - **Paged Attention**: Normally, each request is assigned a fixed contiguous buffer of size max_context_length ahead-of time. Paged Attention divides gpu memory into pages (i.e. 16 tokens). As the model generates the required tokens, the scheduler allocates only the amount of pages required. This is important as output is non-deterministic: a request can generate 20 or 150 tokens. This is why allocating the full buffer ahead-of time is so inefficient. 
 
@@ -30,7 +30,7 @@ Paged Attention allows continuous batching to be efficient through just-in-time 
 
 When serving a model a quantized version is needed. Qwen3-8B is around 16gb in bf16 format, so it doesn't fit on the RTX 5060Ti GPU I am using. Therefore, NVFP4 the new 4-bit quantization for blackwell gpus is used, trained by RedHatAI. NVFP4 reduces Qwen3-8B memory footprint to approximately 6gb. This allows there to be nearly 7gb for context thats 48,224 tokens, allowing me to support nearly 6 users with 8192-token context each. Furthermore, quantization of kv_cache is needed as well from auto/bf16 to fp8 with per tensor scales allowing an increased capactiy of 96,224 tokens.
 
-It would be nice to quantizethe  KV cache to NVFP4 as well, but not yet supported as of March 2026. This would probably also cause too much information loss, so an 8-bit representation of the KV cache is the current sweet spot. 
+It would be nice to quantize the  KV cache to NVFP4 as well, but not yet supported as of March 2026. This would probably also cause too much information loss, so an 8-bit representation of the KV cache is the current sweet spot. 
 
 
 
