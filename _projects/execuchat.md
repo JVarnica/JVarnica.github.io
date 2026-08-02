@@ -57,14 +57,14 @@ For more details on the Android app look at the Execuchat repository, combines b
 - Docker/ python server [vllm-server](https://github.com/JVarnica/vllm-server)
 - research agent [research-agent](https://github.com/JVarnica/research-agent)
 
-For a detailed breakdown of the server architecture, inference configuration, and multi-user design decisions, see the [Python Server hub](/projects/python-server-hub.md/).
-For detailed breakdown of research-agent architecture, see [Research Agent hub](/_projects/research-agent-hub.md).
+For a detailed breakdown of the server architecture, inference configuration, and multi-user design decisions, see the [Python Server hub](/projects/python-server-hub/).
+For detailed breakdown of research-agent architecture, see [Research Agent hub](/projects/research-agent-hub).
 
 ## Blog posts 
 
 To understand the repositories, explain challenges and improvements blog posts are written. For example one is written on the docker server for vLLM and the challenges faced when building for multiple users, next why vLLM was used for inference and what configurations used. The blog posts:
 
-- **why & inference vLLM**-[inference.md](/_posts/2026-03-24-inference.md)
-- **Part 1:Building a chatbot with vLLM** — [inference-server.md](/_posts/2026-04-08-inference-server.md)
-- **Part 2: Web Search Tool** - [agentic-search.md](/_posts/2026-04-20-agentic-search.md)
+- **why & inference vLLM**-[inference.md](/inference/)
+- **Part 1:Building a chatbot with vLLM** — [inference-server.md](/inference-server)
+- **Part 2: Web Search Tool** - [agentic-search.md](/agentic-search)
 

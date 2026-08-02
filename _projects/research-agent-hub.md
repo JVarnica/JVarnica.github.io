@@ -19,8 +19,7 @@ Currently consumed by [ExecuChat](/projects/execuchat/) but deployable independe
 
 ## Architecture
 
-The system is built as a LangGraph graph with a Redis-backed worker queue. Tasks are submitted via a FastAPI endpoint and processed asynchronously — the client connects to the polling endpoint which is called every 0.5 seconds, and receives events as the graph progresses through each node.
-
+The system is built as a LangGraph graph with a Redis-backed worker queue. Tasks are submitted via an endpoint and processed asynchronously, the client connects to the polling endpoint which is called every 0.5 seconds, and receives events as the graph progresses through each node. 
 ```
 Query → Plan queries → [Search → Scrape → Summarise → Extract claims] → Reflect → Loop? → Write sections → Stitch report
                               ↑__________________________|  (if not sufficient)
@@ -40,6 +39,8 @@ Query → Plan queries → [Search → Scrape → Summarise → Extract claims] 
 | **Stitch** | Assembles sections into a final report with reference list |
 
 ### Key Design Decisions
+
+How detailed is the context given to the model? This matters more than the model itself, can only reason with the context given. If the context is not factual and detailed, the model will just output basic generalizations as needs to fit the schema/ or minimum token count. This was an issue in the first draft way to generic without substance, as was just using the generic claims to get detail which had a max character length of 100. Thus, document summaries are used which is the factual information and now we have claims which is the mapping of the docs to a topic. So multiple docs covering the same issue will be the same claim, this has drastically improved performance. 
 
 **Claims as the unit of knowledge** — rather than passing raw documents to the writer, the graph first extracts atomic claims with source attribution. The planner then assigns specific claim IDs to each section. This keeps the writer grounded and makes citation audit straightforward.
 
