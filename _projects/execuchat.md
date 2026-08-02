@@ -8,9 +8,11 @@ github: https://github.com/JVarnica/Execu_Chat
 
 ## Overview
 
-ExecuChat is an android app with an offline and online mode, the offline mode was started first as wanted to see how well a model could run on a mobile phone. This was successful could run different llama models with whisper and llava; but the limitation was apparent the conversation was stale and can oly use its pre-trained knowledge. Not really useful as a working chatbot hence online mode was created. 
+ExecuChat is an android app with an offline and online mode. The offline mode was started first to see how well a model could run on a mobile phone. This was rather successful could run llama1B & llama3B, Qwen3-3B, whisper and Llava; when quantized to 4 bit integers. The limitation was apparent the conversation was stale, and could only use its pre-trained knowledge, so it had no up to date facts. Not really useful as a working chatbot hence online mode was created.
 
-- **Offline mode**- Executorch vulkan & XNNPACK backend, chat with llama models, and qwen3_4B. Voice to text (asr) using whisper and image understanding using llava. 
+Using ExecuTorch to run these models is a great achievement not possible a few years ago, and will continue to improve what is capable on small devices. 
+
+- **Offline mode**- Executorch vulkan & XNNPACK backend, chat with llama models, and qwen3_4B. Voice to text (asr) using whisper and image understanding using llava. More details in github repository. 
 
 - **Online mode** connects to a FastAPI gateway for authentication and identification of the users, the gateway then forwards to each service. The features
 
@@ -20,7 +22,7 @@ ExecuChat is an android app with an offline and online mode, the offline mode wa
     +  **Auth/JWT**, authentication using JWT tokens so 30 mins session with silent refresh 
     +  **Redis**, to store session context 
     +  **Redis stream**, to queue the text chunks so can be retrieved and embedded.
-    +  **Saved convos**, save to sqlite database using asynchronous sqlite for multiple users
+    +  **Saved convos**, save to sqlite database using asynchronous sqlite (aiosqlite) for multiple users.
     +  **RAG**, uses Qdrant to store Redis embeddings persistently, and then retrieve with query. 
 
 ## Why I built Execuchat
@@ -55,8 +57,8 @@ For more details on the Android app look at the Execuchat repository, combines b
 - Docker/ python server [vllm-server](https://github.com/JVarnica/vllm-server)
 - research agent [research-agent](https://github.com/JVarnica/research-agent)
 
-For a detailed breakdown of the server architecture, inference configuration, and multi-user design decisions, see the [Python Server hub](/_projects/python-server-hub).
-For detailed breakdown of research-agent architecture, see [Research Agent hub](/_projects/research-agent-hub).
+For a detailed breakdown of the server architecture, inference configuration, and multi-user design decisions, see the [Python Server hub](/projects/python-server-hub).
+For detailed breakdown of research-agent architecture, see [Research Agent hub](/projects/research-agent-hub).
 
 ## Blog posts 
 

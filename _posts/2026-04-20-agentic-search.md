@@ -8,7 +8,7 @@ tags: [docker, vllm, redis, sql, jwt]
 project: execuchat
 ---
 
-## Web Search Tool Chabot
+## Adding a Web Search Tool
 
 In the previous post,[building inference server](/_posts/2026-04-08-inference-server.md), retrieved context was injected into the model as a system message. This method is insufficient for a working chatbot, mainly because toggling the search button is annoying and doesn't work very well. Will solve this issue by using search as a tool call. 
 

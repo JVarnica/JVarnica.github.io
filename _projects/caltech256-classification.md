@@ -8,13 +8,13 @@ github: https://github.com/JVarnica/Caltech256_classification
 
 # Caltech256 Classification
 
-A systematic investigation into transfer learning for vision models — comparing architectures, fine-tuning strategies, data augmentation, and quantization across two datasets.
+A systematic investigation into transfer learning for vision models, it compares architectures, fine-tuning strategies, data augmentation, and quantization across Caltech256. The Linear probing study tells me which model deserved fine-tuning and further analysis, this was done on both Caltech256 and cifar100, unlike fine-tuning. 
 
 ## Overview
 
-The goal was simple but deliberate: understand *why* different training choices produce different results, not just which number comes out highest. Starting from linear probing to isolate raw feature extraction capability, then moving to full fine-tuning experiments where fine-tuning strategy, augmentation regime, and quantization method were varied independently.
+The goal was simple but deliberate: understand *why* different training choices produce different results and what model architectures work best. Starting from linear probing to isolate raw feature extraction capability, then moving to full fine-tuning experiments where fine-tuning strategy, augmentation regime, and quantization method were varied independently.
 
-Two datasets were used throughout. Caltech256 is a real-world dataset with varying image sizes, similar in distribution to ImageNet — the models' home territory. CIFAR-100 has smaller 32×32 images and was used primarily for linear probing to understand how resolution affects feature transferability. The contrast between the two turned out to be one of the more interesting findings.
+Caltech256 is a real-world dataset with varying image sizes, similar in distribution to ImageNet, which the models were trained on. CIFAR-100 has smaller 32×32 images and was used primarily for linear probing to understand how resolution affects feature transferability. The contrast between both dataset results turned out to be one of the most interesting findings.
 
 ## Methodology
 

@@ -4,7 +4,7 @@ title: About
 permalink: /about/
 ---
 
-Hi, I'm Julien, I have an interest in making intelligence accessible, so build AI systems with open-sourced models whether on-device or self-hosted server.
+Hi, I'm Julien, I have an interest in making intelligence accessible, so I build AI systems with open-sourced models whether on-device or self-hosted server.
 
 - Currently open to roles. Based in Milton Keynes, UK
 - open to working in-office, remote or hybrid

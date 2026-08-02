@@ -1,7 +1,7 @@
 ---
 layout: project
 title: Research Agent
-summary: "LangGragh agent: plans queries, searches in parallel, extracts and merges claims, reflects on gaps, and writes a structured markdown report"
+summary: "LangGraph agent: plans queries, searches in parallel, extracts and merges claims, reflects on gaps, and writes a structured markdown report"
 github: https://github.com/JVarnica/research-agent
 ---
 

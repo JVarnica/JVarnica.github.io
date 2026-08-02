@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "How I made a vllm docker inference server"
-date: 2026-04-20
+date: 2026-04-08
 categories: [backend, vLLM, auth, inference, agent]
 tags: [docker, vllm, qdrant, redis, sql, jwt]
 project: execuchat

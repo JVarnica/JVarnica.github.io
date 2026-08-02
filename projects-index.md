@@ -26,7 +26,7 @@ The self-hosted backend powering ExecuChat's online mode — FastAPI gateway wit
 
 ## [Deep Research Agent](/projects/research-agent-hub/)
 
-A containerised LangGraph research agent that takes a query through iterative search, claim extraction, reflection, and report writing. Frontend-agnostic — communicates entirely via SSE events. Standalone deployable.
+A containerised LangGraph research agent that takes a query through iterative search, claim extraction, reflection, and report writing. Frontend-agnostic it communicates entirely via polling a Redis list. Standalone deployable.
 
 **Python · LangGraph · FastAPI · Redis · Docker**
 
@@ -36,7 +36,7 @@ A containerised LangGraph research agent that takes a query through iterative se
 
 ## [Caltech256 Classification](/projects/caltech256-classification/)
 
-A systematic investigation into transfer learning — comparing 11 vision architectures across three fine-tuning strategies, augmentation regimes, and QAT vs PTQ quantization. Wanted to understand what worked, what happened if I tweak this learning rate,
+A systematic investigation into transfer learning — comparing 11 vision architectures across three fine-tuning strategies, augmentation regimes, and QAT vs PTQ quantization. 
 
 **Python · PyTorch · timm · NVIDIA DALI · Executorch**
 

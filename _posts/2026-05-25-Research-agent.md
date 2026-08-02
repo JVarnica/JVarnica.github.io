@@ -11,7 +11,7 @@ project: execuchat
 
 ## Intro
 
-The research agent has its own container within the docker server as it calls vllm directly. Only the gateway can access this container as its on expose, so the endpoints on the gateway just need to forward to the research agent's endpoints. Why is Langraph used in the first place - couldn't this just have been a tool loop like for search? For research this is harder as there are several distinct tasks: querying, searching, summarizing, reflecting, planning and writing. Furthermore the model needs to search a few different queries, and getting a model to output multiple correct tool calls reliably for this is flaky. The graph like approach of LangChain makes all these steps a lot easier with its abstractions. 
+The research agent has its own container within the docker server as it calls vllm directly. Only the gateway can access this container as its on expose, so the endpoints on the gateway just need to forward to the research agent's endpoints. Why is LangGraph used in the first place - couldn't this just have been a tool loop like for search? For research this is harder as there are several distinct tasks: querying, searching, summarizing, reflecting, planning and writing. Furthermore the model needs to search a few different queries, and getting a model to output multiple correct tool calls reliably for this is flaky. The graph like approach of LangChain makes all these steps a lot easier with its abstractions. 
 <table>
 <tr>
 <td><pre><code># route.py in research  
@@ -36,7 +36,7 @@ async def research_status(request: Request):
 
 ## How it works
 
-Redis is used extensively as the source of truth because of its data types and its in memory nature. Each time the research endpoint is called it creates a string key with a record. This record has a task_id to identify each research process, and a status field with PENDING,RUNNING,COMPLETED,CANCELLED & FAILED to indicate progress. It also stores the user's query and the final report if available. Then a payload with task_id, query, and max_research_loops is pushed to a redis list called dpr:queue.
+Redis is used extensively as the source of truth because of its data types and its in memory nature. Each time the research endpoint is called it creates a string key with a record. This record has a task_id to identify each research process, and a status field with PENDING,RUNNING,COMPLETED,CANCELLED & FAILED to indicate progress. It also stores the user's query and the final report if available. Then a payload with task_id, query, and max_research_loops is pushed to a Redis list called dpr:queue.
 ```
 record = {
         "task_id": task_id,
@@ -50,7 +50,7 @@ await redis.set(_task_key(task_id), json.dumps(record), ex=TASK_TTL_SECONDS)
 await redis.rpush("dpr:queue", json.dumps({"task_id": task_id, "query": query, "max_research_loops": max_research_loops,}))
 ```
 
-So on the redis side the research data is there. Will use Redis's blpop method which blocks until an element appears in the list, then takes and removes it. This is better than polling as blpop parks on connection and awakes the instance a job arrives, whereas polling would return empty polls. A list is deliberately preferred over a semaphore in the worker loop, as it is a source truth and always sure the workers will get the first element. A Redis stream is an option but not enough elements are getting taken from it to warrant one, and the task last a while (not like in the embedding pipeline).
+So on the Redis side the research data is there. Will use Redis's blpop method which blocks until an element appears in the list, then takes and removes it. This is better than polling as blpop parks on connection and awakes the instance a job arrives, whereas polling would return empty polls. A list is deliberately preferred over a semaphore in the worker loop, as it is a source truth and always sure the workers will get the first element. A Redis stream is an option but not enough elements are getting taken from it to warrant one, and the task last a while (not like in the embedding pipeline).
 
 
 As the container is a FastAPI app it has a lifespan, so when the app starts, worker tasks are created running worker_loop method, which pulls from the list. The number of workers is 3, so there can be 3 concurrent research task at once and the 4th stays in the queue. Once it has gotten the job data then _run_graph is ran, meaning each worker completes the job task then is available. 
@@ -81,7 +81,7 @@ async def worker_loop(redis: aioredis.Redis, graph):
                 redis = redis
             )
 ```
-On shutdown the worker tasks are cancelled, then gathered with a timeout so no suspended calls just stuck there. The http connections are also closed to search and redis clients, don't aclose the vllm connection. The task is cancelled with the cancel key, a Redis string called "dpr:cancel:task_id", is created in the cancel research endpoint. The worker loop then checks if this string exists if so then the redis string is deleted. This logic is applied in the worker loop to cancel queued tasks, and in the run_graph method where a separate worker polls the cancel key.
+On shutdown the worker tasks are cancelled, then gathered with a timeout so no suspended calls just stuck there. The http connections are also closed to search and Redis clients, don't aclose the vllm connection. The task is cancelled with the cancel key, a Redis string called "dpr:cancel:task_id", is created in the cancel research endpoint. The worker loop then checks if this string exists if so then the Redis string is deleted. This logic is applied in the worker loop to cancel queued tasks, and in the run_graph method where a separate worker polls the cancel key.
 ``` 
 # in _run_graph() in task.py
         config = {"configurable": {"thread_id": task_id},
@@ -93,14 +93,14 @@ On shutdown the worker tasks are cancelled, then gathered with a timeout so no s
         finally: 
             watcher.cancel()
 ```
-The connection pools for the clients to vllm, redis and search are also set up in lifespan; don't want to create a new client on each call. 
+The connection pools for the clients to vllm, Redis and search are also set up in lifespan; don't want to create a new client on each call. 
 For the connection to vllm a client class is created, with the instantiated LLMs, calling **ChatOpenAI** only once on startup. There are 3 different model configurations, two for structured calls returning a schema one with 8196(fast) and 2048(cheap) max tokens. Then the writer which writes free prose for the sections so has a repetition penalty, which cannot be done for non structured calls. The ChatOpenAI class has a **with_structured_format** method which has schema as input and told to output a json schema. Luckily vllm can use xgrammar to have constrained generation or this wouldn't be possible.
 ```
 def structured_llm(self, schema: Type[T]) -> BaseChatModel:
     
     return self._fast.with_structured_output(schema, method="json_schema")
 ```
-This structured format is a must, and using Pydantic's **BaseModel** allows the model to follow the schema set on generation. Each node in the graph has its own task and schema. Another useful thing is the **AsyncRedisSaver**, when setup as a checkpointer so the graph is saved to redis. Each state has its own checkpointer keyed by thread_id so no corruption. Honestly didn't use it much though as LangGraph errors are quite descriptive.  
+This structured format is a must, and using Pydantic's **BaseModel** allows the model to follow the schema set on generation. Each node in the graph has its own task and schema. Another useful thing is the **AsyncRedisSaver**, when setup as a checkpointer so the graph is saved to Redis. Each state has its own checkpointer keyed by thread_id so no corruption. Honestly didn't use it much though as LangGraph errors are quite descriptive.  
 
 ## The graph
 ```
@@ -115,7 +115,7 @@ generate_queries → search_all_queries → scrape_node
                               stitch_report → END
 ```
 
-The graph becomes active once **_run_graph** is called, it first updates the status to running and then initializes **OverallState** this stores the important variables with their respective reducers so LangGraph knows what operation to perform. Each is useful for a specific node, doc_summaries is where overview, quotes and key_findings are stored so need to be accumulated- operator.add is hence used for appending. Though the urls found for that loop are overwritten, search_hits has no operator.
+The graph becomes active once **_run_graph** is called, it first updates the status to running and then initialises **OverallState** this stores the important variables with their respective reducers so LangGraph knows what operation to perform. Each is useful for a specific node, doc_summaries is where overview, quotes and key_findings are stored so need to be accumulated- operator.add is hence used for appending. Though the urls found for that loop are overwritten, search_hits has no operator.
 ```
 class OverallState(TypedDict):
     # ---- Input ----
@@ -140,7 +140,7 @@ class OverallState(TypedDict):
 ```
 ## Nodes
 
-**Generate_queries**, uses the cheap structured model configuration, to generate 3-5 diverse queries. The result outputs a `QuerySet`, each query is a pydantic basemodel with query, rationale and category fields. The category field is used as SearXNG won't provide papers on a general query, only science for example. When the call to Searxng allowed all categories it got too much junk so a category per query was made, still mostly outputs 'general' though. The query_ids though are created afterwards server side can't ask a model to do this.
+**Generate_queries**, uses the cheap structured model configuration, to generate 3-5 diverse queries. The result outputs a `QuerySet`, each query is a pydantic basemodel with query, rationale and category fields. The category field is used as SearXNG won't provide papers on a general query, only science for example. When the call to SearXNG allowed all categories it got too much junk so a category per query was made, still mostly outputs 'general' though. The query_ids though are created afterwards server side can't ask a model to do this.
 
 **Search_queries_seq**, searching SearXNG needs to happen sequentially as state needs to know which url has been seen, this cannot happen on a parallel process. First it needs to also keep track of the completed query, and seen_urls is a list turned into a set which is the previous loops urls, if a hit url isn't in seen_url then its appended to new_hist and added to seen_urls. These new_hits are only for this loop known as the search_hits, and what will be scraped. If accumulated search_hits throughout loops would re-scrape the hits. 
 ```
@@ -187,7 +187,7 @@ Each branch produces a DocSummary with following fields:
     -relevance, does this doc help answer the question?
 
 The Doc_summary node is very important as it first triages the scraped content based on whether this doc is relevant or not. The plan at the start was to have a  separate triaging call to the model for relevancy once scraped, but this was inefficient took nearly 2 minutes to triage 60 urls (with concurrency).
-With send which also works in parallel you can see the summaries as they appear, more information for the user; the overall time is very similar of both strategies though. Lastly, if a branch's LLM call fails then relevant is just set to false no raising, and manually input the title, url,doc_id.
+With send which also works in parallel you can see the summaries as they appear, more information for the user; the overall time is very similar of both strategies though. Lastly, if a branch's LLM call fails then relevant is just set to false no raising, and manually input the title, url, doc_id.
 
 ### Claims
 
@@ -212,7 +212,7 @@ With send which also works in parallel you can see the summaries as they appear,
 ```
 ### Reflection Loop
 
-**Reflect** is the loop decision. It's shown the previous reflections, the claims index, the evidence split into *previous*(last loops) vs *new*(this loop), and every query already searched. Previous reflections is a string format of reflection history instead of json, so model can understand the current understanding and knowledge gap better. The model reflects whether this evidence is sufficient if true moves onto `plan_report`, if not sufficient, then a knowledge gap is written. The model also has to output its current understanding so knows its progress next loop; but the key is the model judges whether the new evidence resolves the identified gap from last loop. If a gap is identified then goes back to `search_all_queries` so can find relevant content to fulfill this gap. If a gap was searched and nothing came back, it's told to stop asking, as that gap is unfillable from web search.
+**Reflect** is the loop decision. It's shown the previous reflections, the claims index, the evidence split into *previous*(last loops) vs *new*(this loop), and every query already searched. Previous reflections is a string format of reflection history instead of json, so model can understand the current understanding and knowledge gap better. The model reflects whether this evidence is sufficient if true moves onto `plan_report`, if not sufficient, then a knowledge gap is written. The model also has to output its current understanding so knows its progress next loop; but the key is the model judges whether the new evidence resolves the identified gap from last loop. If a gap is identified then goes back to `search_all_queries` so can find relevant content to fulfil this gap. If a gap was searched and nothing came back, it's told to stop asking, as that gap is unfillable from web search.
  
 There are two non-LLM guards on top. If a loop produced zero new relevant summaries, sufficiency is forced without spending an LLM call. And if the model says "not sufficient" but all its follow-up queries are duplicates, termination is forced. The router then sends it back to search if all good but insufficient or on to planning:
  
@@ -262,9 +262,9 @@ _emit(task_id, "report_ready", length=len(final))
 
 This is the structure of the research agent, with LangGraph have been able to make this an iterative process to get a final well structured report. The overall state is a nice addition just needs a reducer and you return it and don't worry about it. The graph approach with conditional edges so can go from extracting claims back to generating queries is good, so re-usable a very good framework. This wasn't the first iteration did one with Redis queues each tasks was queued and would happen sequentially the report difference isn't comparable.
  
-There isn't subgraphs used as still had to keep the graph simple, can't be running too many processes on a single 5060Ti GPU. Hence it also blpops from a list with a number of workers for concurrency, this isn't possible on a bigger scale. What I could have done differently is not run the graph to completion with `graph.ainvoke(...)`,and used `stream_mode="messages"` so could stream the final report; this would have been done if bigger model but instead done by sections so quicker and more focused. 
+There isn't subgraphs used as still had to keep the graph simple, can't be running too many processes on a single 5060Ti GPU. Hence it also blpops from a list with a number of workers for concurrency, this isn't possible on a bigger scale. What I could have done differently is not run the graph to completion with `graph.ainvoke(...)`,and used `stream_mode="messages"` so could stream the final report. This would have been done with a larger model but instead done by sections as qwen3-8B would loose focus and detail near the middle.
 
-For more information on how the research agent was built read this blog [Building a research-agent](_posts/2026-05-27-Building-research-agent.md)
+For more information on how the research agent was built read this blog [Incrementally Building Research Agents]({{ site.baseurl }}{% post_url 2026-05-27-Building-research-agent %}).
 
  
 
