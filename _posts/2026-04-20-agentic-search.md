@@ -206,8 +206,7 @@ For the probe call only probe messages are added which is simply the last two pa
 <tr>
 <td markdown="1">
 
-**Block A: Tool Loop & Probe**
-
+**Block A: Tool Loop & Probe*
 ```python
 for tool_iter in range(MAX_TOOL_ITER):
     probe_payload = {
